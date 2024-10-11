@@ -11,4 +11,4 @@ npm run start
 ```bash
 npm run dev
 ```
-#References of this app is the course "NodeJS: De cero a experto" by Fernando Herrera
+# References of this app is the course "NodeJS: De cero a experto" by Fernando Herrera
