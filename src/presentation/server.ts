@@ -10,7 +10,6 @@ export class Server {
     public static start() { 
         console.log("Server started!");
         const url = "http://localhost:3000/";
-
         CronService.CreateJob( "*/10 * * * * *", () => {
             new CheckService(() => console.log(`${url} is ok!`),
             ( error ) => console.log(error), fileSystemDataSource).execute(url);
