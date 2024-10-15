@@ -13,7 +13,7 @@ export class Server {
 
         //## Send an email
 
-        // const emailService = new EmailService();
+        // const emailService = new EmailService(fileSystemDataSource);
         // emailService.sendEmail({
         //     to: "somemail@somemail.com",
         //     subject: "Test email",
