@@ -24,7 +24,7 @@ export class EmailService {
         },
     });
 
-    constructor( private readonly logRepository: LogRepository  ) {}
+    constructor() {}
 
     async sendEmail(options: SendEmailOptions): Promise<boolean> {
         const { to, subject, htmlBody, attachments = [] } = options;
