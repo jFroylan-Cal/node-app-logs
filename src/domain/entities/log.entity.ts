@@ -28,13 +28,24 @@ export class LogEntity {
         this.origin = origin;
     }
     
-    static fromJson = ( json: string): LogEntity => {
+    static fromJson = (json: string): LogEntity => {
+        json = ( json === '') ? '{}' : json;
         const { message, level, createdAt } = JSON.parse(json);
         if (!level || !message || !createdAt) {
             throw new Error(`Invalid log json ${json}`);
         }
         
         const log = new LogEntity({ message,  level,  createdAt, origin});
+        return log;
+    }
+
+    static fromObject = (object: { [key: string]: any }): LogEntity => {
+        const { message, level, createdAt, origin } = object;
+        if (!level || !message || !createdAt) {
+            throw new Error(`Invalid log object ${object}`);
+        }
+        
+        const log = new LogEntity({ message, level, createdAt, origin });
         return log;
     }
 }
