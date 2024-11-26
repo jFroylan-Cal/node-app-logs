@@ -1,4 +1,5 @@
 import { CheckService } from "../domain/use-cases/checks/check-service";
+import { CheckServiceMultiple } from "../domain/use-cases/checks/check-service-multiple";
 import { SendLogsEmail } from "../domain/use-cases/email/send-email-logs";
 import { FileSystemDataSource } from "../infrastructure/datasources/file-system.datasources";
 import { MongoLogDataSource } from "../infrastructure/datasources/mongo-log.datasource";
@@ -7,9 +8,13 @@ import { LogRepositoryImpl } from "../infrastructure/repositories/log.repository
 import { CronService } from "./cron/cron-service";
 import { EmailService } from "./email/email.service";
 
-const logRepository = new LogRepositoryImpl(
-    // new FileSystemDataSource()
-    // new MongoLogDataSource()
+const fsLogRepository = new LogRepositoryImpl(
+    new FileSystemDataSource()
+);
+const mongoLogRepository = new LogRepositoryImpl(
+    new MongoLogDataSource()
+);
+const postgresLogRepository = new LogRepositoryImpl(
     new PostgresLogDataSource()
 );
 
@@ -39,11 +44,14 @@ export class Server {
         //## Cron to check if the server is ok
         
         const url = "http://google.com";
-        CronService.CreateJob( "*/10 * * * * *", () => {
-            new CheckService(() => console.log(`${url} is ok!`),
-            ( error ) => console.log(error), logRepository).execute(url);
+        CronService.CreateJob("*/10 * * * * *", () => {
+            new CheckServiceMultiple(
+                [fsLogRepository, mongoLogRepository, postgresLogRepository],
+                () => console.log(`${url} is ok!`),
+                (error: any) => console.log(error)).execute(url);
             // new CheckService().execute("http://localhost:3000/");
         });
         
     }
 }
+ 
